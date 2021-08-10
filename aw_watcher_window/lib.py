@@ -37,6 +37,7 @@ def get_current_window_macos(strategy: str) -> Optional[dict]:
 
 def get_current_window_windows() -> Optional[dict]:
     from . import windows
+    from . import git
 
     window_handle = windows.get_active_window_handle()
     try:
@@ -51,6 +52,12 @@ def get_current_window_windows() -> Optional[dict]:
         app = "unknown"
     if title is None:
         title = "unknown"
+    if title != "unknown":
+        path = git.get_path_from_title(title)
+        if path != "unknown":
+            repo = git.get_repo_from_path(path)
+            branch = git.get_branch_from_path(path)
+            return {"app": app, "title": title, "repo": repo, "branch": branch}
 
     return {"app": app, "title": title}
 
